@@ -1,0 +1,17 @@
+export const ATSCAP=[
+ ['Requisitions','Read open reqs and create new ones with approvals','GET','/v1/requisitions?status=open','analyst',()=>({count:214,sample:{id:'REQ-1042',title:'Senior Java Developer',location:'Pune',openings:3}})],
+ ['Job posting','Publish to your career site and job boards','POST','/v1/jobs/REQ-2318/postings','sourcer',()=>({status:'published',channels:['career_site','naukri','linkedin']})],
+ ['Candidate import','Pull profiles, CVs and attachments','GET','/v1/candidates?updated_since=24h','sourcer',()=>({count:386,attachments:371,parsed:367})],
+ ['Applications','New applications arrive by webhook','HOOK','application.created','screener',()=>({event:'application.created',candidate:'C-88213',requisition:'REQ-2291'})],
+ ['Stage moves','Move candidates through your own stages','PATCH','/v1/applications/A-55102/stage','tara',()=>({from:'Screened',to:'Interview',approved_by:'recruiter'})],
+ ['Scorecards','Read and write interview feedback','POST','/v1/scorecards','screener',()=>({application:'A-55102',overall:'strong_yes',ratings:{skills:4,communication:4,ownership:5}})],
+ ['Interviews','Create, reschedule and cancel interviews','POST','/v1/interviews','scheduler',()=>({id:'INT-7731',start:'2026-10-28T11:30:00+05:30',panel:2,video_link:true})],
+ ['Notes and tags','Write notes, tags and source details','POST','/v1/candidates/C-88213/notes','tara',()=>({note:'N-40122',tags:['silver-medallist','java']})],
+ ['Offers','Draft, route for approval and send offers','POST','/v1/offers','analyst',()=>({id:'OF-2210',status:'pending_approval',within_band:true})],
+ ['Rejections','Reasoned dispositions with your templates','POST','/v1/applications/A-55011/reject','screener',()=>({reason:'notice_period_over_limit',template:'polite_regret_v2',send:'after_approval'})],
+ ['Custom fields','Map and write your custom fields','GET','/v1/custom_fields','tara',()=>({fields:17,mapped:17,unmapped:0})],
+ ['Bias masking','Hide protected fields while scoring','POST','/v1/policies/scoring-mask','screener',()=>({masked:['name','gender','age','photo'],applies_to:'all_scoring'})],
+ ['Duplicate merge','Detect and merge duplicate profiles','POST','/v1/candidates/merge','sourcer',()=>({pairs_checked:1204,merged:63})],
+ ['Webhooks','Real-time events in both directions','HOOK','/v1/webhooks','tara',()=>({subscriptions:9,p95_latency_ms:420})],
+ ['Reports and exports','Pull funnel, source and time-to-fill data','GET','/v1/reports/funnel?range=30d','analyst',()=>({applied:3124,screened:1201,interviewed:212,offers:51,joined:42})],
+ ['Onboarding hand-off','Push new hires to your HRMS','POST','/v1/hires/OF-2190/handoff','analyst',()=>({hrms:'connected',employee_record:'created',joining:'2026-11-03'})]];
