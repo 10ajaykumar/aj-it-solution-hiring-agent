@@ -1,0 +1,71 @@
+/* Layout: app shell. Sticky top bar, left tool panel holding every option (explore sections, live demo, workspace tools, integration, company), main area that switches between the landing overview and the agent workspace. Light theme by default with light-blue / light-pink borders; dark available from the toggle. */
+:root{
+  --bg:#F3F8FF; --surface:#FFFFFF; --surface2:#F4F9FF; --surface3:#E6F0FE; --topbar:rgba(255,255,255,.86);
+  --text:#16203F; --muted:#4D5A80; --dim:#8490B4;
+  --line:#DCE9FB; --line2:#C5DAF6;
+  --lb:#8EC9FF; --lp:#FFB3D9;
+  --blue:#1F6FE5; --sky:#1B84D6; --violet:#8B6CF0; --pink:#DB2777; --rose:#BE1F69;
+  --good:#0E9C61; --warn:#B57400; --bad:#D6334A;
+  --t-blue:rgba(47,134,246,.1); --t-pink:rgba(236,72,153,.1); --t-good:rgba(14,156,97,.1); --t-warn:rgba(181,116,0,.11); --t-bad:rgba(214,51,74,.09); --t-violet:rgba(139,108,240,.09);
+  --grad:linear-gradient(120deg,#2B7BEF,#E2468F);
+  --gborder:linear-gradient(135deg,#8EC9FF,#D6ECFF 42%,#FFE1F0 58%,#FFB3D9);
+  --shadow:0 1px 2px rgba(20,40,90,.04),0 14px 34px -20px rgba(47,134,246,.3);
+  --scrim:rgba(18,30,70,.3); --grid:rgba(47,134,246,.05);
+  --halo1:#DDEEFF; --halo2:#FFE3F1; --sb1:#EAF4FF; --sb2:#FFEAF4;
+  --f-sans:"IBM Plex Sans","Segoe UI",system-ui,-apple-system,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --f-hud:"Chakra Petch","IBM Plex Sans",system-ui,sans-serif;
+  --top:60px;
+  color-scheme:light;
+}
+:root[data-theme="dark"]{
+  --bg:#05071C; --surface:#0D1336; --surface2:#111944; --surface3:#172158; --topbar:rgba(8,12,38,.86);
+  --text:#EEF0FF; --muted:#A6AEDC; --dim:#757EB2;
+  --line:rgba(169,214,255,.15); --line2:rgba(169,214,255,.3);
+  --blue:#5B92FF; --sky:#86D0FF; --violet:#9B72FF; --pink:#FF5CBE; --rose:#FFB4DC;
+  --good:#3EE0A1; --warn:#FFC24B; --bad:#FF6B81;
+  --t-blue:rgba(91,146,255,.18); --t-pink:rgba(255,92,190,.16); --t-good:rgba(62,224,161,.14); --t-warn:rgba(255,194,75,.14); --t-bad:rgba(255,107,129,.16); --t-violet:rgba(155,114,255,.16);
+  --gborder:linear-gradient(135deg,rgba(159,205,255,.8),rgba(159,205,255,.25) 42%,rgba(255,186,221,.25) 58%,rgba(255,186,221,.8));
+  --shadow:0 18px 50px -30px rgba(0,0,0,.7);
+  --scrim:rgba(2,3,14,.62); --grid:rgba(169,214,255,.05);
+  --halo1:rgba(91,146,255,.12); --halo2:rgba(255,92,190,.1); --sb1:#0E1640; --sb2:#22163F;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+body{background:radial-gradient(900px 620px at 0 0,var(--halo1),transparent 62%),radial-gradient(900px 620px at 100% 0,var(--halo2),transparent 62%),var(--bg);background-attachment:fixed;color:var(--text);font-family:var(--f-sans);font-size:15.5px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+#sky{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:44px 44px;-webkit-mask:radial-gradient(ellipse at 60% 20%,#000 25%,transparent 75%);mask:radial-gradient(ellipse at 60% 20%,#000 25%,transparent 75%)}
+a{color:var(--sky)}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--pink);outline-offset:2px;border-radius:6px}
+h1,h2,h3,h4{margin:0;text-wrap:balance;line-height:1.15;font-weight:600;letter-spacing:-.012em}
+h2{font-family:var(--f-hud);font-size:clamp(1.6rem,3vw,2.3rem);font-weight:700}
+p{margin:0}
+.mono{font-family:var(--f-mono)}
+.tab{font-variant-numeric:tabular-nums}
+.gt{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lede{color:var(--muted);max-width:66ch;font-size:1.02rem}
+.cat{display:inline-flex;align-items:center;gap:10px;font-family:var(--f-hud);font-weight:600;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--dim)}
+.cat b{color:var(--pink);font-weight:700}
+.cat i{width:24px;height:1px;background:linear-gradient(90deg,var(--lb),var(--lp))}
+.lbl{font-family:var(--f-mono);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:8px}
+
+/* card = light-blue / light-pink border with corner brackets */
+.glass{position:relative;background:linear-gradient(var(--surface),var(--surface)) padding-box,var(--gborder) border-box;border:1px solid transparent;box-shadow:var(--shadow)}
+.glass::after{content:"";position:absolute;inset:-1px;pointer-events:none;border-radius:inherit;background:linear-gradient(var(--lb),var(--lb)) top left/18px 2px no-repeat,linear-gradient(var(--lb),var(--lb)) top left/2px 18px no-repeat,linear-gradient(var(--lp),var(--lp)) bottom right/18px 2px no-repeat,linear-gradient(var(--lp),var(--lp)) bottom right/2px 18px no-repeat}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:10px;padding:10px 18px;font-family:var(--f-hud);font-weight:600;font-size:.82rem;letter-spacing:.05em;text-transform:uppercase;text-decoration:none;white-space:nowrap;transition:transform .15s,filter .15s,background .15s}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--grad);color:#fff;box-shadow:0 10px 24px -12px rgba(236,72,153,.7)}
+.btn-primary:hover{filter:brightness(1.08)}
+.btn-ghost{background:var(--surface);border:1px solid var(--lb);color:var(--text)}
+.btn-ghost:hover{border-color:var(--lp);background:var(--t-pink)}
+.btn-li{background:#0A66C2;color:#fff}
+.btn-li:hover{filter:brightness(1.1)}
+.btn-sm{padding:6px 12px;font-size:.72rem;border-radius:8px}
+.btn[disabled]{opacity:.55;cursor:default}
+kbd{font-family:var(--f-mono);font-size:.68rem;padding:1px 6px;border-radius:5px;border:1px solid var(--line2);background:var(--surface2);color:var(--muted)}
+.li-ic{width:15px;height:15px;flex:none;fill:currentColor}

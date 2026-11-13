@@ -1,0 +1,35 @@
+{
+  "name": "aj-it-solution-hiring-agent",
+  "version": "6.0.0",
+  "private": true,
+  "description": "AJ IT Solution Smart Hiring Agent web application (Vite front end + Express API)",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "concurrently -k -n api,web -c blue,magenta \"npm:dev:api\" \"npm:dev:web\"",
+    "dev:api": "node --watch --env-file-if-exists=.env server/index.js",
+    "dev:web": "vite",
+    "build": "vite build",
+    "start": "node --env-file-if-exists=.env server/index.js",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "express": "^5.3.0",
+    "express-rate-limit": "^8.7.4",
+    "helmet": "^8.3.0",
+    "jspdf": "^4.2.1",
+    "jspdf-autotable": "^5.0.9",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^5.1.0",
+    "concurrently": "^10.0.7",
+    "jsdom": "^31.0.1",
+    "supertest": "^7.3.2",
+    "vite": "^8.3.8",
+    "vitest": "^5.1.0"
+  }
+}

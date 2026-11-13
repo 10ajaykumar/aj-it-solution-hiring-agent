@@ -1,0 +1,670 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="AJ IT Solution, the Smart Hiring Agent: sources, screens, schedules and reports, with a recruiter approving every key step.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<title>AJ IT Solution · Smart Hiring Agent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Chakra+Petch:wght@500;600;700&display=swap">
+</head>
+<body>
+<canvas id="sky" aria-hidden="true"></canvas>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <linearGradient id="gGrad" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#2F86F6"/><stop offset=".55" stop-color="#9D7CF2"/><stop offset="1" stop-color="#EC4899"/></linearGradient>
+  <linearGradient id="gGradV" x1="0" x2="0" y1="1" y2="0"><stop offset="0" stop-color="#2F86F6"/><stop offset="1" stop-color="#EC4899"/></linearGradient>
+  <linearGradient id="gArea" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#EC4899" stop-opacity=".28"/><stop offset="1" stop-color="#2F86F6" stop-opacity="0"/></linearGradient>
+</defs></svg>
+
+<header class="topbar">
+  <button class="hamb" id="hamb" aria-label="Open menu"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+  <a class="brand" href="#top" data-go="home"><span class="brand-dot"></span><span>AJ IT Solution<small>by <b>Ajay Kumar</b></small></span></a>
+  <button class="tsearch" id="tSearch" type="button"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-5-5"/></svg><span>Search, or brief AJ…</span><kbd>Ctrl K</kbd></button>
+  <div class="tright">
+    <span class="stat-pill"><span class="live-dot"></span><span id="topClock">--:--:--</span> IST</span>
+    <button class="stat-pill xp-pill" data-act="missions" title="Missions and XP"><span id="xpLvl">Rookie</span><span class="bar"><i id="xpBar" style="width:0"></i></span><b id="xpNum">0 XP</b></button>
+    <button class="stat-pill who-pill" id="whoPill" hidden title="Change email"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4.5-6 8-6s7 2 8 6"/></svg><span id="whoTxt"></span></button>
+    <button class="icon-btn" id="themeBtn" aria-label="Switch to dark theme" title="Switch theme"><svg id="themeIco" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+    <a class="btn btn-li btn-sm li-link sparkle" target="_blank" rel="noopener" href="https://www.linkedin.com/"><svg class="li-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.22 8h4.56v14H.22V8zm7.5 0h4.37v1.92h.06c.61-1.15 2.1-2.37 4.32-2.37 4.62 0 5.47 3.04 5.47 7v7.45h-4.56v-6.6c0-1.58-.03-3.6-2.2-3.6-2.2 0-2.53 1.72-2.53 3.49V22H7.72V8z"/></svg><span>Connect</span></a>
+    <button class="btn btn-primary btn-sm" data-go="command">Launch</button>
+  </div>
+</header>
+
+<div class="shell">
+<div class="sb-scrim" id="sbScrim"></div>
+<aside class="sidebar" id="sidebar" aria-label="AJ IT Solution tools">
+  <div class="sb-agent glass"><span class="o"><i></i><i></i></span><div><b>AJ IT Solution</b><small><span class="live-dot"></span>4 agents online</small></div></div>
+  <div class="sb-tools" aria-label="Tools">
+    <button class="sb-tool" id="sbSearch" type="button" title="Search or brief AJ (Ctrl K)"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-5-5"/></svg>Search</button>
+    <button class="sb-tool" id="sbTheme" type="button" title="Switch light or dark theme"><svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>Theme</button>
+    <button class="sb-tool" data-act="missions" type="button" title="Missions and XP"><svg viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg>XP</button>
+    <button class="sb-tool" data-dl="session" data-f="pdf" type="button" title="Download a report of this session"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>Export</button>
+    <button class="sb-tool" data-act="approvals" type="button" title="Approval queue"><svg viewBox="0 0 24 24"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/></svg>Approve</button>
+    <button class="sb-tool" id="sbMini" type="button" title="Collapse panel to icons"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6M20 6l-6 6 6 6" transform="translate(-2 0)"/></svg>Collapse</button>
+  </div>
+  <nav class="sb-group"><div class="sb-label">Explore</div>
+    <button class="sb-item" data-go="#top"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Overview</button>
+    <button class="sb-item" data-go="#showcase"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 8h18M8 21h8"/></svg>Product tour</button>
+    <button class="sb-item" data-go="#livemap"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>Live hiring map<span class="bdg g">LIVE</span></button>
+        <button class="sb-item" data-go="#meet"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4.5-6 8-6s7 2 8 6"/></svg>Meet the agent</button>
+    <button class="sb-item" data-go="#impact"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-9-9v9z"/><path d="M14 3.3A9 9 0 0 1 20.7 10H14z"/></svg>Impact infographics</button>
+    <button class="sb-item" data-go="#workflow"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/><path d="M7 12h3M14 12h3"/></svg>Workflow</button>
+    <button class="sb-item" data-go="#video"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M10 9l5 3-5 3z"/></svg>Video walkthrough</button>
+    <button class="sb-item" data-go="#faq"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6V14M12 17h.01"/></svg>FAQ</button>
+  </nav>
+  <nav class="sb-group"><div class="sb-label">Hands-on</div>
+    <button class="sb-item" data-go="#auto"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg>Automations<span class="bdg g">LIVE</span></button>
+    <button class="sb-item" data-go="#studio"><svg viewBox="0 0 24 24"><rect x="2" y="9" width="5" height="6" rx="1.5"/><rect x="9.5" y="9" width="5" height="6" rx="1.5"/><rect x="17" y="9" width="5" height="6" rx="1.5"/><path d="M7 12h2.5M14.5 12H17"/></svg>Agent Studio<span class="bdg p">NEW</span></button>
+    <button class="sb-item" data-go="#play"><svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="4"/><path d="M7 10v4M5 12h4M15 11h.01M18 13h.01"/></svg>Recruiter vs AJ<span class="bdg g">PLAY</span></button>
+    <button class="sb-item" data-act="missions"><svg viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg>Missions<span class="bdg" id="bXp">0 XP</span></button>
+  </nav>
+  <nav class="sb-group"><div class="sb-label">Live demo</div>
+    <button class="sb-item" data-act="tour"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8l6 4-6 4z"/></svg>Guided demo<span class="bdg g">8 steps</span></button>
+    <button class="sb-item" data-go="#demo"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="7" height="7" rx="1.5"/><rect x="14" y="4" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Demos by HR role</button>
+    <button class="sb-item" data-go="sandbox"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.7 3h10.6a2 2 0 0 0 1.7-3l-5-9V3"/></svg>Try it yourself</button>
+  </nav>
+  <nav class="sb-group"><div class="sb-label">Workspace</div>
+    <button class="sb-item" data-go="command"><svg viewBox="0 0 24 24"><path d="M4 17l6-6-6-6M12 19h8"/></svg>Command<span class="bdg">⌘K</span></button>
+    <button class="sb-item" data-go="pipeline"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="10" y="4" width="5" height="11" rx="1.5"/><rect x="17" y="4" width="4" height="7" rx="1.5"/></svg>Pipeline<span class="bdg" id="bPipe">0</span></button>
+    <button class="sb-item" data-go="analytics"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 6-7"/></svg>Analytics</button>
+    <button class="sb-item" data-go="reports"><svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg>Reports<span class="bdg">9</span></button>
+    <button class="sb-item" data-go="agents"><svg viewBox="0 0 24 24"><rect x="4" y="7" width="16" height="12" rx="3"/><path d="M12 3v4M9 12h.01M15 12h.01M9 16h6"/></svg>Agent team</button>
+    <button class="sb-item" data-go="atscon"><svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>ATS Console<span class="bdg">16</span></button>
+    <button class="sb-item" data-act="approvals"><svg viewBox="0 0 24 24"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/></svg>Approvals<span class="bdg p" id="bAppr">3</span></button>
+  </nav>
+  <nav class="sb-group"><div class="sb-label">Integration &amp; value</div>
+    <button class="sb-item" data-go="#ats"><svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>ATS integration</button>
+    <button class="sb-item" data-go="#roi"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>ROI calculator</button>
+  </nav>
+  <nav class="sb-group"><div class="sb-label">Company</div>
+    <button class="sb-item" data-go="#creator"><svg viewBox="0 0 24 24"><path d="M12 2l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z"/></svg>Creator</button>
+    <button class="sb-item" id="sbEmail" type="button"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4.5-6 8-6s7 2 8 6"/></svg>Change my email</button>
+    <button class="sb-item" data-act="leads" id="sbLeads" hidden><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M4 7l8 6 8-6"/></svg>Access list<span class="bdg p" id="bLeads">0</span></button>
+    <a class="sb-item li-item li-link sparkle" target="_blank" rel="noopener" href="https://www.linkedin.com/"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10v7M8 7v.01M12 17v-4a2 2 0 0 1 4 0v4M12 10v7"/></svg>LinkedIn profile<span class="bdg" style="background:rgba(255,255,255,.2);color:#fff">↗</span></a>
+  </nav>
+  <div class="sb-foot">
+    <div class="sb-creator glass">
+      <div class="row"><span class="av sparkle cr-img" role="img" aria-label="Ajay Kumar" style="background-color:transparent"></span><div><small>Created by</small><b>Ajay Kumar</b></div></div>
+      <a class="btn btn-li btn-sm li-link sparkle" target="_blank" rel="noopener" href="https://www.linkedin.com/"><svg class="li-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.22 8h4.56v14H.22V8zm7.5 0h4.37v1.92h.06c.61-1.15 2.1-2.37 4.32-2.37 4.62 0 5.47 3.04 5.47 7v7.45h-4.56v-6.6c0-1.58-.03-3.6-2.2-3.6-2.2 0-2.53 1.72-2.53 3.49V22H7.72V8z"/></svg>Connect on LinkedIn</a>
+    </div>
+    <span class="mono">AJ IT v6.0 · sample data</span>
+  </div>
+</aside>
+
+<main id="main">
+<div id="landing">
+<section class="hero" id="top">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <a class="new-pill" href="#studio" data-go="#studio"><b>NEW</b>Agent Studio and Recruiter vs AJ are live →</a>
+        <div class="hud-tag" style="margin-top:16px">Smart Hiring Agent</div>
+        <h1 class="acro wm" aria-label="AJ IT Solution: smart hiring agent">
+          <span class="ac"><b>AJ</b><span>Hiring agent</span></span><span class="ac"><b>IT</b><span>ATS-native</span></span><span class="ac sm"><b>Solution</b><span>Human approved</span></span>
+        </h1>
+        <p class="hero-h">The AI recruiter that <span class="rot gt" id="rot"><span>sources.</span></span> You make the calls.</p>
+        <p class="lede">Brief AJ like a colleague. Four specialist agents source, screen, schedule and report, then write every update back to your ATS. Anything that matters waits for your approval.</p>
+        <div class="hero-cta"><button class="btn btn-primary" data-go="#studio">▶ Start hands-on demo</button><button class="btn btn-ghost" data-act="tour">Guided tour</button><button class="btn btn-ghost" data-go="#play">Play Recruiter vs AJ</button></div>
+        <div class="trust-row">
+          <span><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>You approve every key step</span>
+          <span><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Bias-masked scoring</span>
+          <span><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Works on your ATS</span>
+          <span><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>DPDP-ready</span>
+        </div>
+        <div class="hero-proof">
+          <div><b class="gt">18h → 5h</b><span>recruiter effort per hire</span></div>
+          <div><b class="gt">45%</b><span>faster time-to-fill</span></div>
+          <div><b class="gt">16</b><span>ATS platforms supported</span></div>
+        </div>
+        <a class="built-by" href="https://www.linkedin.com/" target="_blank" rel="noopener"><span class="cr-img" role="img" aria-label="Ajay Kumar"></span><span>Built by <b>Ajay Kumar</b><small>Creator of AJ IT Solution · connect on LinkedIn ↗</small></span></a>
+      </div>
+      <div class="flow-stage glass" id="flowStage">
+        <canvas id="flowCv" aria-hidden="true"></canvas>
+        <div class="fs-head"><span class="con-label"><span class="live-dot"></span>Live talent flow</span><span><b id="fsRate">42</b> profiles / min</span></div>
+        <div class="fs-col fs-in" id="fsIn">
+          <span class="fs-chip" data-c="#5FB4FF"><i style="background:#5FB4FF"></i>Your ATS</span>
+          <span class="fs-chip" data-c="#2F86F6"><i style="background:#2F86F6"></i>Naukri</span>
+          <span class="fs-chip" data-c="#9D7CF2"><i style="background:#9D7CF2"></i>LinkedIn</span>
+          <span class="fs-chip" data-c="#EC4899"><i style="background:#EC4899"></i>Referrals</span>
+          <span class="fs-chip" data-c="#0E9C61"><i style="background:#0E9C61"></i>Career site</span>
+        </div>
+        <div class="fs-core">
+        <svg class="hudsvg" viewBox="0 0 420 420" aria-hidden="true">
+          <g class="r1" fill="none"><circle cx="210" cy="210" r="196" stroke="#8EC9FF" stroke-width="1.5" stroke-dasharray="2 8"/><circle cx="210" cy="210" r="184" stroke="#8EC9FF" stroke-width="3" stroke-dasharray="80 36 18 36"/></g>
+          <g class="r2" fill="none"><circle cx="210" cy="210" r="162" stroke="#FFB3D9" stroke-width="2.5" stroke-dasharray="130 56 8 56"/><circle cx="210" cy="210" r="152" stroke="#FFB3D9" stroke-opacity=".5" stroke-width="9" stroke-dasharray="1 5"/></g>
+          <g class="r3" fill="none"><circle cx="210" cy="210" r="134" stroke="#8EC9FF" stroke-width="1.5" stroke-dasharray="28 12"/></g>
+          <g stroke="#8EC9FF" stroke-width="2" fill="none"><path d="M36 64V36h28M356 36h28v28"/></g><g stroke="#FFB3D9" stroke-width="2" fill="none"><path d="M384 356v28h-28M64 384H36v-28"/></g>
+        </svg>
+        <div class="sweep"></div>
+        <div class="rb-say" id="rbSay" aria-live="polite">Hi, I'm AJ.</div>
+        <button class="robot" id="robotBtn" data-go="command" aria-label="Open the AJ workspace"><svg class="rb" viewBox="0 0 320 360" role="img" aria-label="AJ, the hiring robot">
+<defs>
+<linearGradient id="rbSa" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".6" stop-color="#EEF5FF"/><stop offset="1" stop-color="#D6E7FD"/></linearGradient>
+<linearGradient id="rbPa" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#FFDDEE"/></linearGradient>
+<linearGradient id="rbVa" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0F1A4C"/><stop offset="1" stop-color="#2C1752"/></linearGradient>
+<linearGradient id="rbEa" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D2F4FF"/><stop offset="1" stop-color="#3D9BFF"/></linearGradient>
+<radialGradient id="rbHa" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#8EC9FF" stop-opacity=".55"/><stop offset=".6" stop-color="#FFB3D9" stop-opacity=".22"/><stop offset="1" stop-color="#FFB3D9" stop-opacity="0"/></radialGradient>
+<filter id="rbGa" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+<filter id="rbDa" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#2F86F6" flood-opacity=".22"/></filter>
+</defs>
+<circle cx="160" cy="180" r="158" fill="url(#rbHa)" class="rb-halo"/>
+<ellipse cx="160" cy="344" rx="120" ry="13" fill="none" stroke="#8EC9FF" stroke-width="2" class="rb-base"/>
+<ellipse cx="160" cy="344" rx="86" ry="8" fill="none" stroke="#FFB3D9" stroke-width="2" class="rb-base b2"/>
+<g filter="url(#rbDa)">
+<path d="M58 342 C58 284 92 254 132 250 L188 250 C228 254 262 284 262 342 Z" fill="url(#rbSa)" stroke="#C5DAF6" stroke-width="1.5"/>
+<path d="M92 278 C104 264 118 258 132 256M228 278 C216 264 202 258 188 256" stroke="#C5DAF6" stroke-width="2" fill="none"/>
+<rect x="116" y="274" width="88" height="30" rx="11" fill="url(#rbVa)"/>
+<g class="rb-leds"><circle cx="133" cy="289" r="4"/><circle cx="146.5" cy="289" r="4"/><circle cx="160" cy="289" r="4"/><circle cx="173.5" cy="289" r="4"/><circle cx="187" cy="289" r="4"/></g>
+<text x="160" y="327" text-anchor="middle" class="rb-tag">AJ</text>
+<rect x="138" y="218" width="44" height="38" rx="11" fill="#DCE9FB"/><path d="M141 231h38M141 242h38" stroke="#C5DAF6" stroke-width="2"/>
+</g>
+<g class="rb-head" filter="url(#rbDa)">
+<path d="M160 58 V31" stroke="#C5DAF6" stroke-width="4" stroke-linecap="round"/><circle cx="160" cy="26" r="8" fill="#EC4899" filter="url(#rbGa)" class="rb-ant"/>
+<circle cx="70" cy="146" r="22" fill="url(#rbPa)" stroke="#FFB3D9" stroke-width="2"/><circle cx="70" cy="146" r="10" fill="none" stroke="#EC4899" stroke-width="3" class="rb-ear"/>
+<circle cx="250" cy="146" r="22" fill="url(#rbPa)" stroke="#FFB3D9" stroke-width="2"/><circle cx="250" cy="146" r="10" fill="none" stroke="#EC4899" stroke-width="3" class="rb-ear"/>
+<rect x="78" y="56" width="164" height="170" rx="72" fill="url(#rbSa)" stroke="#C5DAF6" stroke-width="1.5"/>
+<path d="M114 72 C134 63 186 63 206 72" stroke="#fff" stroke-width="6" stroke-linecap="round" fill="none"/>
+<rect x="94" y="106" width="132" height="70" rx="35" fill="url(#rbVa)"/>
+<path d="M110 117 C132 109 172 109 198 113" stroke="#8EC9FF" stroke-opacity=".35" stroke-width="3" fill="none" stroke-linecap="round"/>
+<g id="rbEyes" class="rb-eyes" filter="url(#rbGa)"><rect class="rb-eye" x="121" y="125" width="22" height="31" rx="11" fill="url(#rbEa)"/><rect class="rb-eye" x="177" y="125" width="22" height="31" rx="11" fill="url(#rbEa)"/></g>
+<rect class="rb-scan" x="100" y="110" width="120" height="4" rx="2" fill="#8EC9FF"/>
+<path d="M144 197 Q160 207 176 197" stroke="#8EC9FF" stroke-width="4" stroke-linecap="round" fill="none" filter="url(#rbGa)"/>
+<ellipse cx="104" cy="194" rx="9" ry="5" fill="#FFB3D9" opacity=".75"/><ellipse cx="216" cy="194" rx="9" ry="5" fill="#FFB3D9" opacity=".75"/>
+</g>
+<g class="rb-hand"><circle cx="34" cy="270" r="16" fill="url(#rbPa)" stroke="#FFB3D9" stroke-width="2"/><circle cx="34" cy="270" r="6" fill="#FFB3D9"/></g>
+<g class="rb-hand r"><circle cx="286" cy="262" r="16" fill="url(#rbSa)" stroke="#8EC9FF" stroke-width="2"/><circle cx="286" cy="262" r="6" fill="#8EC9FF"/></g>
+</svg></button>
+        <span class="orb-label"><span class="live-dot"></span>Click AJ to enter</span>
+        </div>
+        <div class="fs-col fs-out" id="fsOut">
+          <span class="fs-chip" data-c="#9D7CF2" data-v="1201"><span><i style="background:#9D7CF2"></i>Screened</span><b>1,201</b></span>
+          <span class="fs-chip" data-c="#EC4899" data-v="212"><span><i style="background:#EC4899"></i>Interview</span><b>212</b></span>
+          <span class="fs-chip" data-c="#E39A12" data-v="51"><span><i style="background:#E39A12"></i>Offer</span><b>51</b></span>
+          <span class="fs-chip" data-c="#0E9C61" data-v="42"><span><i style="background:#0E9C61"></i>Joined</span><b>42</b></span>
+        </div>
+        <div class="fs-foot"><span>Status<b>Online</b></span><span>Agents<b>4 / 4</b></span><span>ATS sync<b id="roSync">99.9%</b></span><span>Latency<b id="roLat">12 ms</b></span></div>
+      </div>
+    </div>
+    <div class="tool">
+      <div class="console glass">
+        <div class="con-top"><span class="con-label"><span class="live-dot"></span>Command console</span><span class="right">Connected to <b id="conAts" style="color:var(--text)">Greenhouse</b> · sample data</span></div>
+        <form class="con-input" id="heroCmd"><span class="pr">›</span><input id="heroAsk" autocomplete="off" aria-label="Brief AJ" placeholder="Brief AJ: Find 8 React developers in Hyderabad, notice under 30 days"><button class="btn btn-primary" type="submit">Run AJ</button></form>
+        <div class="chips" id="heroChips"></div>
+      </div>
+      <div class="mods">
+        <button class="mod glass" data-go="pipeline"><div class="mh">Pipeline<span class="go">↗</span></div><div class="mv" id="mPipe">0</div><div class="stack" id="mStack"></div><div class="ms">candidates across five stages</div></button>
+        <button class="mod glass" data-go="agents"><div class="mh">Agents<span class="go">↗</span></div><div class="adots" id="mDots"></div><div class="ms" id="mAgentNow">Sourcer is searching Naukri</div></button>
+        <button class="mod glass" data-act="approvals"><div class="mh">Approvals<span class="go">↗</span></div><div class="mv" id="mAppr">3</div><div class="ms" id="mApprTop">waiting for your sign-off</div></button>
+        <button class="mod glass" data-go="reports"><div class="mh">Report<span class="go">↗</span></div><div class="mv">23.4d</div><div class="ms">time-to-fill · 9-section report ready</div></button>
+        <button class="mod glass" data-go="sandbox"><div class="mh">Try it<span class="go">↗</span></div><div class="mv" style="font-size:1.15rem">Your JD</div><div class="ms">paste a JD or upload a CSV</div></button>
+      </div>
+    </div>
+  </div>
+  <div class="ticker" aria-label="Live agent activity"><div class="ticker-in"><span class="tag-live"><span class="live-dot"></span>LIVE</span><div class="ticker-track" id="ticker"></div></div></div>
+</section>
+
+<section id="showcase" style="padding-bottom:30px">
+  <div class="wrap">
+    <div class="sec-head center-head"><span class="cat"><b>Product tour</b><i></i>Inside the agent</span><h2>See the whole agent at work.</h2><p class="lede">Real screens from AJ. Pick a view, hover to straighten it, then open it yourself.</p></div>
+    <div class="sc-tabs" id="scTabs" role="tablist"></div>
+    <div class="sc-stage">
+      <div class="browser">
+        <div class="br-bar"><i style="background:#ff6b81"></i><i style="background:#ffc24b"></i><i style="background:#3ee0a1"></i><span class="br-url" id="scUrl">AJ › Workspace › Command</span><span class="br-live"><span class="live-dot"></span>live</span></div>
+        <div class="br-view">
+          <img id="sci-command" src="/img/sci-command.webp" alt="AJ Command view with a ranked shortlist" width="1200" height="856" class="on">
+          <img id="sci-studio" src="/img/sci-studio.webp" alt="Agent Studio paused at the shortlist checkpoint" width="1200" height="856">
+          <img id="sci-pipeline" src="/img/sci-pipeline.webp" alt="Pipeline board with candidates across five stages" width="1200" height="856">
+          <img id="sci-analytics" src="/img/sci-analytics.webp" alt="Live analytics with funnel, source mix and trend" width="1200" height="856">
+          <img id="sci-reports" src="/img/sci-reports.webp" alt="Nine-section TA performance report" width="1200" height="856">
+          <div class="br-scan"></div><div class="br-prog" id="scProg"></div>
+        </div>
+      </div>
+      <div class="fcard glass f1"><span class="fi" style="background:#2F86F6">✓</span><div>63 duplicates merged<small>Sourcer · 6 seconds</small></div></div>
+      <div class="fcard glass f2"><span class="fi" style="background:#EC4899">⚡</span><div>9 interviews booked<small>Scheduler · 0 clashes</small></div></div>
+      <div class="fcard glass f3"><span class="fi" style="background:#9D7CF2">🔒</span><div>Name, gender, age masked<small>Screener · every CV</small></div></div>
+      <div class="fcard glass f4"><span class="fi" style="background:#0E9C61">✋</span><div>Waiting for your approval<small>Offer · REQ-1042</small></div></div>
+    </div>
+    <div class="sc-cap"><p id="scCap"></p><button class="btn btn-primary btn-sm" id="scGo">Open this view →</button></div>
+  </div>
+</section>
+
+<div class="works"><div class="wrap"><span class="cat" style="flex:none"><b>Works with</b><i></i>Your stack</span><div class="mq"><div class="mq-track" id="mqTrack"></div></div></div></div>
+
+<section id="auto">
+  <div class="wrap">
+    <div class="sec-head"><span class="cat"><b>Automation</b><i></i>Recipes</span><h2>Automations that run while you sleep.</h2><p class="lede">Each recipe starts from a trigger and runs a chain of agent actions. Pick one and press <b style="color:var(--text)">Test run</b> to watch every step fire.</p></div>
+    <div class="auto glass"><div class="au-list" id="auList"></div><div class="au-main" id="auMain"></div></div>
+  </div>
+</section>
+
+<section id="studio">
+  <div class="wrap">
+    <div class="sec-head"><span class="cat"><b>Hands-on</b><i></i>Agent Studio</span><h2>Run a full requisition, stage by stage.</h2><p class="lede">Nine stages, four agents, and three decisions that stay with you. Press <b style="color:var(--text)">Run</b>, watch every tool call, and approve or send work back at each checkpoint. Click any stage to inspect it.</p></div>
+    <div class="studio glass">
+      <div class="st-bar">
+        <label class="pill" for="stReq">Requisition <select id="stReq"></select></label>
+        <div class="st-cps"><span class="lbl" style="margin:0">You approve</span><label class="sw" for="cp1"><input type="checkbox" id="cp1" checked> Shortlist</label><label class="sw" for="cp2"><input type="checkbox" id="cp2" checked> Outreach</label><label class="sw" for="cp3"><input type="checkbox" id="cp3" checked> Offer</label></div>
+        <div class="seg" id="stSpeed" aria-label="Speed"><button type="button" data-v="1" class="on">1×</button><button type="button" data-v="2">2×</button><button type="button" data-v="4">4×</button></div>
+        <div class="st-btns"><button class="btn btn-ghost btn-sm" id="stReset" type="button">Reset</button><button class="btn btn-ghost btn-sm" id="stStep" type="button">Step ›</button><button class="btn btn-primary btn-sm" id="stRun" type="button">▶ Run all</button></div>
+      </div>
+      <div class="st-track" id="stTrack"></div>
+      <div class="st-body">
+        <div class="st-insp" id="stInsp"></div>
+        <div class="st-side">
+          <div class="st-clocks"><div><div class="lbl">AJ time</div><b id="stAgentT">0s</b></div><div><div class="lbl">Manual effort</div><b id="stManT">0h</b></div><div><div class="lbl">Your calls</div><b id="stDec">0</b></div></div>
+          <div class="st-funnel" id="stFunnel"></div>
+          <div class="st-log" id="stLog" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="play">
+  <div class="wrap">
+    <div class="sec-head"><span class="cat"><b>Play</b><i></i>Recruiter vs AJ</span><h2>Can you screen faster than the agent?</h2><p class="lede">Eight CVs, one job. Shortlist or reject each one against the brief. Names are hidden, the same way AJ hides them while scoring. Then see how your calls and your time compare.</p></div>
+    <div class="game glass" id="game"></div>
+  </div>
+</section>
+
+<section class="statband"><div class="wrap"><div class="st-band" id="stBand">
+  <div><b data-to="18240">0</b><span>agent tasks this month</span></div>
+  <div><b data-to="1310">0</b><span>recruiter hours saved</span></div>
+  <div><b data-to="11.1" data-pre="₹" data-suf="L" data-dec="1">0</b><span>value of time saved</span></div>
+  <div><b data-to="96" data-suf="%">0</b><span>of agent suggestions approved</span></div>
+</div></div></section>
+
+<section id="livemap">
+  <div class="wrap">
+    <div class="sec-head"><span class="cat"><b>Real time</b><i></i>Live hiring map</span><h2>Hiring activity across India, as it happens.</h2><p class="lede">Every pulse is an agent action on a sample requisition: a profile sourced, a CV screened, an interview booked, an offer sent.</p></div>
+    <div class="lm glass">
+      <div class="lm-map" id="lmMap"><canvas id="lmCv" aria-hidden="true"></canvas><div class="lm-kpis"><span><span class="live-dot"></span>Events a minute <b id="lmRate">0</b></span><span>Cities live <b>14</b></span><span>Today <b id="lmTotal">0</b></span></div></div>
+      <div class="lm-side"><div class="lbl" style="margin:0">Top cities right now</div><div class="lm-top" id="lmTop"></div><div class="lbl" style="margin:6px 0 0">Live events</div><div class="lm-feed" id="lmFeed"></div><div class="res-actions"><button class="btn btn-ghost btn-sm dl" data-dl="map" data-f="pdf">⬇ PDF</button><button class="btn btn-ghost btn-sm dl" data-dl="map" data-f="csv">⬇ CSV</button></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="meet">
+  <div class="wrap">
+    <div class="sec-head"><span class="cat"><b>Product</b><i></i>Meet the agent</span><h2>One agent, built for the way recruiters work.</h2><p class="lede">AJ plans multi-step hiring work, uses tools across your ATS, job boards, calendar and email, and explains every decision it makes.</p></div>
+    <div class="meet">
+      <div class="idcard glass">
+        <div class="id-top"><span class="id-orb"><i></i><i></i></span><div><h3>AJ</h3><p>Smart Hiring Agent · v6.0</p></div><span class="pill ok" style="margin-left:auto"><span class="live-dot"></span>Online</span></div>
+        <div class="kv"><div><span>Specialist agents</span><b>4 in parallel</b></div><div><span>Response time</span><b>Under 15 seconds</b></div><div><span>Languages</span><b>English, Hindi</b></div><div><span>Availability</span><b>24 × 7</b></div></div>
+        <div><div class="lbl">Connected tools</div><div class="tools" id="toolChips"></div></div>
+        <div><div class="lbl">Guardrails</div><div class="tools"><span class="tool-chip p">Approval before outreach</span><span class="tool-chip p">Bias masking</span><span class="tool-chip p">Audit log</span><span class="tool-chip p">DPDP-ready</span></div></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-primary btn-sm" data-go="command">Open workspace</button><button class="btn btn-ghost btn-sm" data-act="tour">Watch it work</button></div>
+      </div>
+      <div class="caps" id="caps"></div>
+    </div>
+  </div>
+</section>
+
+<section id="impact">
+  <div class="wrap">
+    <div class="sec-head"><span class="cat"><b>Insights</b><i></i>Impact infographics</span><h2>What changes when AJ joins the team.</h2><p class="lede">Typical results across a 12-recruiter team hiring about 60 people a month. Sample figures for illustration.</p></div>
+    <div class="ba glass">
+      <div class="ba-head"><div><h4>A recruiter's day, before and after AJ</h4><p class="sub">Drag across the panel to compare.</p></div><div class="ba-stats"><span>Admin <b>8h → 1.5h</b></span><span>Time with people <b class="gt">1h → 7.5h</b></span></div></div>
+      <div class="ba-stage" id="baStage">
+        <div class="ba-pane before" id="baBefore"></div>
+        <div class="ba-pane after" id="baAfter"></div>
+        <div class="ba-handle" id="baHandle"><span>⟷</span></div>
+        <input class="ba-range" type="range" id="baRange" min="0" max="100" value="50" aria-label="Compare a recruiter's day before and after AJ">
+      </div>
+    </div>
+    <div class="info-grid">
+      <div class="ig glass ig-gauges"><h4>Headline outcomes</h4><p class="sub">Change after 90 days with AJ</p><div class="gauges" id="gauges"></div></div>
+      <div class="ig glass ig-time"><h4>Where recruiter time goes, per hire</h4><p class="sub">Hours spent on each task, before and after AJ</p><div id="timeSplit"></div></div>
+      <div class="ig glass ig-donut"><h4>Who does the work today</h4><p class="sub">Share of 18,240 agent tasks this month</p><div class="donut-row"><svg viewBox="0 0 170 170" id="agDonut" role="img" aria-label="Agent task share"></svg><div class="legend" id="agLegend"></div></div></div>
+      <div class="ig glass ig-funnel"><h4>The hiring funnel, last 30 days</h4><p class="sub">Candidates at each stage and conversion to the next</p><svg viewBox="0 0 480 250" width="100%" id="funnelIg" role="img" aria-label="Hiring funnel"></svg></div>
+      <div class="ig glass ig-steps"><h4>Time per stage, before → after</h4><p class="sub">Median elapsed time for one requisition</p><div class="steps-ig" id="stepsIg"></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="demo">
+  <div class="wrap">
+    <div class="sec-head"><span class="cat"><b>Live demo</b><i></i>For HR professionals</span><h2>Pick your role. Watch AJ, or run it yourself.</h2><p class="lede"><b style="color:var(--text)">Watch</b> plays a guided demo with a narrator. <b style="color:var(--text)">Try</b> opens the sandbox pre-filled for that role. You can also paste your own JD or upload a CSV of candidates.</p></div>
+    <div class="personas" id="personas"></div>
+    <div class="ops">
+      <div class="term"><div class="term-h"><i style="background:#ff6b81"></i><i style="background:#ffc24b"></i><i style="background:#3ee0a1"></i>&nbsp;aj://ops/console<span><span class="live-dot"></span>streaming</span></div><div class="term-b" id="term"></div></div>
+      <div class="ops-side">
+        <div class="mini glass"><h4>Agent load · last 48 min <span>4-min buckets</span></h4><div class="heat" id="heat"></div><div class="hl"><span>−48m</span><span>now</span></div></div>
+        <div class="mini glass"><h4>Pipeline by city <span>live</span></h4><div class="cities" id="cities"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="workflow">
+  <div class="wrap">
+    <div class="sec-head"><span class="cat"><b>Product</b><i></i>Workflow</span><h2>Six stages. One agent team. Your judgment on top.</h2><p class="lede">Each stage shows what AJ handles on its own and where it stops for you.</p></div>
+    <div class="flow" id="flow"></div>
+    <div class="flow-detail glass" id="flowDetail"></div>
+    <div class="squad" id="squadGrid"></div>
+  </div>
+</section>
+
+<section id="reports">
+  <div class="wrap">
+    <div class="sec-row"><div class="sec-head"><span class="cat"><b>Insights</b><i></i>Reports</span><h2>A complete TA report, written by the Analyst agent.</h2><p class="lede">Nine sections, from the executive summary to agent impact and recommendations. Pick a category to preview it.</p></div><button class="btn btn-primary" data-go="reports">Open full report →</button></div>
+    <div class="rp"><div class="rp-cats glass" id="rpCats"></div><div class="rp-body glass" id="rpBody"></div></div>
+  </div>
+</section>
+
+<section id="video">
+  <div class="wrap">
+    <div class="sec-head"><span class="cat"><b>Live demo</b><i></i>Video walkthrough · 0:30</span><h2>A full hiring cycle in thirty seconds.</h2></div>
+    <div class="player glass">
+      <div class="screen paused" id="screen">
+        <div class="scene active" data-cap="Connect AJ to the ATS you already use. One sign-in, read and write access with approvals."><div style="display:grid;justify-items:center;width:100%"><div class="v-logos"><div>Workday</div><div class="hit">Greenhouse</div><div>Lever</div><div>SuccessFactors</div><div>iCIMS</div><div>Darwinbox</div><div>Zoho Recruit</div><div>SmartRecruiters</div></div><div class="v-ok">✓ Greenhouse connected · 214 open reqs · 18,402 candidates indexed</div></div></div>
+        <div class="scene" data-cap="Tell AJ the hiring goal in plain English, the way you'd brief a colleague."><div class="v-card"><div style="color:#7F88BC;margin-bottom:8px" class="mono">You →</div><div class="typing">Find 15 senior data engineers in Bengaluru, notice ≤ 30 days</div></div></div>
+        <div class="scene" data-cap="The agent team plans and works: search, de-duplicate, score and draft outreach."><div class="v-card"><div class="mono" style="color:#86D0FF;margin-bottom:10px">AJ plan</div><div class="v-steps"><div>✓ Read REQ-2291 and must-have skills</div><div>✓ Search ATS silver medallists, Naukri, LinkedIn</div><div>✓ Remove 63 duplicates</div><div>✓ Score 412 profiles against the JD</div><div>✓ Draft personalised outreach</div></div></div></div>
+        <div class="scene" data-cap="You review a ranked shortlist, with the reason behind every score."><div class="v-card"><div class="v-rows"><div><span>Ananya R. · Spark, Airflow, AWS</span><b style="color:#3EE0A1">94</b></div><div><span>Karthik M. · Databricks, Kafka</span><b style="color:#3EE0A1">91</b></div><div><span>Neha S. · dbt, Snowflake, Python</span><b style="color:#86D0FF">88</b></div><div><span>Rohit V. · GCP, BigQuery</span><b style="color:#86D0FF">85</b></div></div></div></div>
+        <div class="scene" data-cap="AJ books interviews from panel calendars and handles reschedules on its own."><div class="v-card"><div class="mono" style="color:#86D0FF;margin-bottom:10px">Panel availability · Week 42</div><div class="v-cal"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span class="f" style="animation-delay:.4s">10:00</span><span>—</span><span class="f" style="animation-delay:.9s">11:30</span><span>—</span><span class="f" style="animation-delay:1.4s">15:00</span><span>—</span><span class="f" style="animation-delay:1.9s">14:00</span><span>—</span><span class="f" style="animation-delay:2.4s">16:30</span><span>—</span></div></div></div>
+        <div class="scene" data-cap="Everything is written back to your ATS with a full audit trail. Hours of work become minutes."><div><div class="v-big">6 hrs <span class="gt">→ 14 min</span></div><p style="text-align:center;color:#A6AEDC;margin-top:10px" class="mono">per requisition · synced to ATS ✓</p></div></div>
+        <div class="caption" id="caption"></div>
+        <button class="bigplay" id="bigplay" aria-label="Play walkthrough"><span><svg width="28" height="28" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span></button>
+      </div>
+      <div class="controls">
+        <button class="ctrl" id="playBtn" aria-label="Play or pause"><svg id="playIco" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
+        <button class="ctrl" id="restartBtn" aria-label="Restart"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button>
+        <div class="prog" id="prog"><i id="progFill"></i></div>
+        <span class="time" id="time">0:00 / 0:30</span>
+        <label class="toggle"><input type="checkbox" id="narrate"> Narration</label>
+      </div>
+      <div class="chapters" id="chapters"></div>
+    </div>
+  </div>
+</section>
+
+<section id="ats">
+  <div class="wrap">
+    <div class="sec-head"><span class="cat"><b>Integration</b><i></i>Your ATS</span><h2>Sits on top of your ATS. No migration.</h2><p class="lede">Your ATS stays the record of truth. AJ reads requisitions and candidates from it, does the work, and writes scores, stages and notes back in real time.</p></div>
+    <div class="hub glass">
+      <div class="hub-viz"><svg id="hubSvg" viewBox="0 0 600 600" role="img" aria-label="AJ connected to 16 ATS platforms"></svg><div class="hub-core"><span class="id-orb"><i></i><i></i></span><b>AJ</b><small>16 ATS · 16 capabilities</small></div></div>
+      <div class="hub-side"><div class="lbl" style="margin:0">What AJ can do inside your ATS</div><div class="capgrid" id="capGrid"></div><p class="note" style="margin:0">Coverage depends on each vendor's API and your ATS plan. Click a capability to run it in the ATS Console.</p><div class="res-actions"><button class="btn btn-primary btn-sm" data-go="atscon">Open the ATS Console →</button></div></div>
+    </div>
+    <div class="ats-grid">
+      <div>
+        <div class="ats-list" id="atsList"></div>
+        <ol class="steps">
+          <li><div><b>Connect</b><span>Sign in with OAuth or paste an API key. About five minutes.</span></div></li>
+          <li><div><b>Map fields</b><span>AJ auto-maps stages, req IDs, custom fields and rejection reasons. You confirm.</span></div></li>
+          <li><div><b>Set guardrails</b><span>Choose which actions need sign-off: outreach, rejections, offers.</span></div></li>
+          <li><div><b>Go live</b><span>Start with one requisition. Widen the scope once the team trusts the output.</span></div></li>
+        </ol>
+      </div>
+      <div style="min-width:0">
+        <div class="code"><div class="code-h"><span>aj.config.yaml</span><span id="atsName">greenhouse</span></div>
+<pre><span class="k4"># Connection</span>
+<span class="k1">ats</span>:
+  <span class="k2">provider</span>: <span class="k3" id="cfgProvider">greenhouse</span>
+  <span class="k2">auth</span>: oauth2
+  <span class="k2">sync</span>: webhook        <span class="k4"># real-time, both directions</span>
+<span class="k1">agents</span>: [sourcer, screener, scheduler, analyst]
+<span class="k1">channels</span>: [linkedin, naukri, email, whatsapp, teams]
+<span class="k1">guardrails</span>:
+  <span class="k2">approve_before</span>: [outreach_send, stage_reject, offer]
+  <span class="k2">bias_masking</span>: true   <span class="k4"># name, gender, age hidden in scoring</span>
+  <span class="k2">audit_log</span>: true
+  <span class="k2">data_region</span>: in-mumbai</pre></div>
+        <div class="sync glass" id="sync"></div>
+      </div>
+    </div>
+    <div class="trust">
+      <div class="glass"><b>Human approval</b><span>Outreach, rejections and offers wait for your sign-off.</span></div>
+      <div class="glass"><b>Fair scoring</b><span>Name, gender and age are masked while ranking.</span></div>
+      <div class="glass"><b>Full audit log</b><span>Every action is timestamped with its reason.</span></div>
+      <div class="glass"><b>India data residency</b><span>Built around DPDP Act 2023 consent and retention rules.</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="roi">
+  <div class="wrap">
+    <div class="sec-head"><span class="cat"><b>Value</b><i></i>ROI calculator</span><h2>Work out what AJ saves your team.</h2></div>
+    <div class="roi glass">
+      <div>
+        <div class="field"><label for="rRec">Recruiters on the team <output id="oRec"></output></label><input type="range" id="rRec" min="1" max="60" value="12"></div>
+        <div class="field"><label for="rReq">Hires per month <output id="oReq"></output></label><input type="range" id="rReq" min="5" max="400" step="5" value="60"></div>
+        <div class="field"><label for="rHrs">Manual hours per hire today <output id="oHrs"></output></label><input type="range" id="rHrs" min="4" max="40" value="18"></div>
+        <div class="field"><label for="rCost">Recruiter cost per hour (₹) <output id="oCost"></output></label><input type="range" id="rCost" min="300" max="3000" step="50" value="850"></div>
+        <div class="field"><label for="rTtf">Current time-to-fill (days) <output id="oTtf"></output></label><input type="range" id="rTtf" min="15" max="90" value="42"></div>
+      </div>
+      <div>
+        <div class="roi-out">
+          <div class="wide"><div class="n gt" id="vSave">—</div><div class="l">estimated saving per year</div></div>
+          <div><div class="n" id="vHrs">—</div><div class="l">recruiter hours freed per month</div></div>
+          <div><div class="n" id="vFte">—</div><div class="l">recruiter capacity added (FTE)</div></div>
+          <div><div class="n" id="vTtf">—</div><div class="l">new time-to-fill (days)</div></div>
+          <div><div class="n" id="vPer">—</div><div class="l">hours back per recruiter per week</div></div>
+        </div>
+        <p class="note">Estimates assume AJ takes over 70% of screening, scheduling and ATS updates and cuts time-to-fill by 45%. Actual results depend on role mix and approval settings.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="sec-head"><span class="cat"><b>Questions</b><i></i>What HR teams ask</span><h2>Straight answers about AJ.</h2></div>
+    <div class="faq">
+      <details class="glass" open><summary>Does AJ replace recruiters?</summary><p>No. It takes over the admin: searching, screening, scheduling and ATS updates. Every shortlist, outreach message and offer still needs a recruiter's approval, so recruiters spend more time with candidates and hiring managers.</p></details>
+      <details class="glass"><summary>Is this a live product?</summary><p>This is a working demo on sample data. The scoring in Try it yourself and Recruiter vs AJ is real, and Live AI answers come from a real AI model when it is switched on. ATS connections and job-board searches are illustrated, not live.</p></details>
+      <details class="glass"><summary>Which ATS can it work with?</summary><p>Any ATS with an API: Workday, SuccessFactors, Greenhouse, Lever, iCIMS, Darwinbox, Zoho Recruit and SmartRecruiters among them. Your ATS stays the record of truth and AJ writes updates back to it.</p></details>
+      <details class="glass"><summary>How is candidate data protected?</summary><p>Name, gender and age are masked during scoring. Every agent action is logged with its reason. The design keeps data in India and follows DPDP Act 2023 rules for consent and retention.</p></details>
+      <details class="glass"><summary>What would a pilot look like?</summary><p>Four weeks on three to five live requisitions, measured on time-to-fill, recruiter hours saved and hiring-manager satisfaction against a control group.</p></details>
+      <details class="glass"><summary>How do I bring AJ IT Solution to my team?</summary><p>Connect with Ajay Kumar on LinkedIn from the button below or in the left panel to talk about a pilot for your hiring team.</p></details>
+    </div>
+  </div>
+</section>
+
+<section id="cta" style="padding-top:10px">
+  <div class="wrap">
+    <div class="cta-band">
+      <div><span class="cat"><b>Get started</b><i></i>Two minutes</span><h2 style="margin-top:10px">Hire faster. Stay in control.</h2><p>Run a full requisition in Agent Studio, race AJ at screening, or paste one of your own JDs and get a ranked shortlist in seconds.</p></div>
+      <div class="acts">
+        <button class="btn btn-primary" data-go="#studio">▶ Start hands-on demo</button>
+        <button class="btn btn-ghost" data-go="sandbox">Try it with my JD</button>
+        <a class="btn btn-li li-link sparkle" target="_blank" rel="noopener" href="https://www.linkedin.com/"><svg class="li-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.22 8h4.56v14H.22V8zm7.5 0h4.37v1.92h.06c.61-1.15 2.1-2.37 4.32-2.37 4.62 0 5.47 3.04 5.47 7v7.45h-4.56v-6.6c0-1.58-.03-3.6-2.2-3.6-2.2 0-2.53 1.72-2.53 3.49V22H7.72V8z"/></svg>Talk to Ajay on LinkedIn</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="creator">
+  <div class="wrap">
+    <div class="creator glass">
+      <div class="cr-photo sparkle"><span class="cr-img" role="img" aria-label="Ajay Kumar"></span><span class="badge2">in</span></div>
+      <div><span class="cat"><b>Company</b><i></i>Creator</span><h3>Ajay <span class="gt">Kumar</span></h3><p>Designed and built AJ IT Solution to show what agentic AI can do for Talent Acquisition and HR teams. Connect on LinkedIn to discuss a pilot for your hiring team.</p><p class="mono" style="font-size:.8rem;margin-top:8px"><a href="https://www.linkedin.com/" target="_blank" rel="noopener" style="text-decoration:none">linkedin.com</a></p></div>
+      <div class="acts"><a class="btn btn-li li-link sparkle" target="_blank" rel="noopener" href="https://www.linkedin.com/"><svg class="li-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.22 8h4.56v14H.22V8zm7.5 0h4.37v1.92h.06c.61-1.15 2.1-2.37 4.32-2.37 4.62 0 5.47 3.04 5.47 7v7.45h-4.56v-6.6c0-1.58-.03-3.6-2.2-3.6-2.2 0-2.53 1.72-2.53 3.49V22H7.72V8z"/></svg>Connect on LinkedIn</a><button class="btn btn-ghost" data-go="sandbox">Try the agent</button></div>
+    </div>
+  </div>
+</section>
+<footer><div class="wrap"><span>AJ IT Solution · Smart Hiring Agent · concept demo with sample data</span><span>Powered by <a href="https://www.linkedin.com/" target="_blank" rel="noopener">Ajay Kumar</a></span></div></footer>
+</div>
+
+<!-- WORKSPACE (inside main) -->
+<div id="ws" hidden>
+  <div class="ws-head" id="wsHead">
+    <div><div class="crumb">Workspace</div><h2 id="wsTitle">Command</h2></div>
+    <div class="right">
+      <span class="pill ok"><span class="live-dot"></span>4 agents</span>
+      <label class="pill" for="wsAts">ATS <select id="wsAts"></select></label>
+      <button class="pill ai-pill" id="aiPill" hidden type="button" title="Use a real AI model for open questions, JDs and outreach">✦ Live AI <span id="aiState">off</span></button>
+      <label class="sw" for="auto"><input type="checkbox" id="auto" checked> Autopilot</label>
+      <button class="btn btn-ghost btn-sm" data-act="tour">▶ Guided demo</button>
+      <button class="btn btn-ghost btn-sm dl" data-dl="session" data-f="pdf">⬇ Session report</button>
+      <button class="btn btn-ghost btn-sm" data-act="approvals">Approvals <span class="cnt" id="apprCnt">3</span></button>
+    </div>
+  </div>
+
+  <div class="view" data-view="command">
+    <div class="cmd">
+      <div class="cmd-main">
+        <div class="chips" id="chips"></div>
+        <form class="composer glass" id="composer"><input id="ask" autocomplete="off" placeholder="Brief AJ, e.g. Source 10 React developers in Hyderabad, notice under 30 days"><button class="btn btn-primary btn-sm" type="submit">Run ↵</button></form>
+        <div class="thread" id="thread"></div>
+      </div>
+      <aside class="cmd-rail">
+        <div class="rail-card glass"><h4>Agent team <span>live</span></h4><div id="railAgents"></div></div>
+        <div class="rail-card glass"><h4>Activity <span id="railCount"></span></h4><div class="feed" id="railFeed"></div></div>
+      </aside>
+    </div>
+  </div>
+
+  <div class="view" data-view="sandbox" hidden>
+    <p class="view-sub">Describe a real hiring need, or paste a JD. AJ scores candidates against your exact criteria.</p>
+    <div class="sb2">
+      <form class="sb-form glass" id="sbForm">
+        <div class="stepno">Step 01 · Start from a JD (optional)</div>
+        <label for="sbJd">Paste a job description<textarea class="inp" id="sbJd" placeholder="Paste any JD here. AJ pulls out the role, city, experience and skills."></textarea></label>
+        <div class="res-actions"><button type="button" class="btn btn-ghost btn-sm" id="sbExtract">Extract details</button><button type="button" class="btn btn-ghost btn-sm" id="sbSampleJd">Use a sample JD</button></div>
+        <div class="stepno">Step 02 · Hiring brief</div>
+        <label for="sbRole">Role title<input class="inp" id="sbRole" value="Senior Java Developer"></label>
+        <div class="grid2">
+          <label for="sbCity">Location<select class="inp" id="sbCity"></select></label>
+          <label for="sbOpen">Openings<input class="inp" id="sbOpen" type="number" min="1" max="200" value="3"></label>
+          <label for="sbExpMin">Min experience (yrs)<input class="inp" id="sbExpMin" type="number" min="0" max="30" value="5"></label>
+          <label for="sbExpMax">Max experience (yrs)<input class="inp" id="sbExpMax" type="number" min="0" max="35" value="10"></label>
+          <label for="sbNotice">Max notice period<select class="inp" id="sbNotice"><option value="15">15 days</option><option value="30" selected>30 days</option><option value="60">60 days</option><option value="90">90 days</option></select></label>
+          <label for="sbBudget">Budget (₹ LPA)<input class="inp" id="sbBudget" type="number" min="2" max="200" value="28"></label>
+        </div>
+        <div style="display:grid;gap:6px"><span style="font-size:.8rem;color:var(--muted);font-weight:500">Must-have skills</span><div class="skillbox" id="skillbox"><input id="skillIn" aria-label="Add a skill" placeholder="Type and press Enter"></div><div class="sugg" id="sugg"></div></div>
+        <div class="stepno">Step 03 · Candidates</div>
+        <div class="seg" id="srcSeg"><button type="button" data-v="gen" class="on">AJ sources them</button><button type="button" data-v="csv">Use my CSV</button></div>
+        <div id="csvBox" hidden style="display:grid;gap:8px">
+          <div class="file"><input type="file" id="csvFile" accept=".csv,text/csv"><button type="button" class="btn btn-ghost btn-sm" id="csvSample">Load sample CSV</button></div>
+          <textarea class="inp" id="csvText" placeholder="name,skills,experience,notice_days,city&#10;Asha Rao,Java;Spring Boot;AWS,7,30,Pune"></textarea>
+          <span style="font-size:.74rem;color:var(--dim)">Columns: name, skills (separated by ;), experience, notice_days, city. Your file stays in your browser.</span>
+        </div>
+        <button class="btn btn-primary" type="submit" id="sbRun">Run AJ on this brief →</button>
+      </form>
+      <div class="sb-out" id="sbOut"><div class="empty"><b>Your results appear here</b>Fill the brief on the left, or pick a role preset from the landing page, then press Run. You'll see each step the agents take, a ranked shortlist with reasons, an outreach draft and a mini report.</div></div>
+    </div>
+  </div>
+
+  <div class="view" data-view="pipeline" hidden>
+    <div class="res-actions" style="margin-bottom:12px"><p class="view-sub" style="margin:0">Drag cards between stages, or tap a card to open it. With Autopilot on, agents move cards as they work.</p><span style="margin-left:auto;display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-ghost btn-sm dl" data-dl="pipeline" data-f="csv">⬇ CSV</button><button class="btn btn-ghost btn-sm dl" data-dl="pipeline" data-f="pdf">⬇ PDF</button><select class="sel" id="reqFilter" aria-label="Filter by requisition"></select></span></div>
+    <div class="board" id="board"></div>
+  </div>
+
+  <div class="view" data-view="analytics" hidden>
+    <div class="res-actions" style="margin-bottom:12px"><p class="view-sub" style="margin:0">Numbers update live as the agents work. Sample data.</p><span style="margin-left:auto" class="dl-grp"><button class="btn btn-ghost btn-sm dl" data-dl="analytics" data-f="pdf">⬇ PDF</button><button class="btn btn-ghost btn-sm dl" data-dl="analytics" data-f="csv">⬇ CSV</button></span></div>
+    <div class="kpis">
+      <div class="kpi glass"><div class="l">Open reqs</div><div class="n" id="kReq">214</div><div class="d up">+6 this week</div></div>
+      <div class="kpi glass"><div class="l">Time-to-fill</div><div class="n" id="kTtf">23.4d</div><div class="d up">−18.6d vs Q2</div></div>
+      <div class="kpi glass"><div class="l">CVs screened today</div><div class="n" id="kCv">486</div><div class="d up">by Screener agent</div></div>
+      <div class="kpi glass"><div class="l">Hours saved today</div><div class="n" id="kHrs">61</div><div class="d up">≈ 7.6 recruiter days</div></div>
+    </div>
+    <div class="an-grid">
+      <div class="card glass"><div class="card-h"><h4>Hiring funnel</h4><span>stage conversion</span></div><div class="funnel" id="funnel"></div></div>
+      <div class="card glass"><div class="card-h"><h4>Source mix</h4><span>active pipeline</span></div><div class="donut-row"><svg viewBox="0 0 120 120" style="width:130px;height:130px" id="donut" role="img" aria-label="Pipeline by source"></svg><div class="legend" id="legend"></div></div></div>
+      <div class="card glass"><div class="card-h"><h4>Time-to-fill trend</h4><span>days · 8 weeks</span></div><svg viewBox="0 0 320 120" width="100%" id="trend" role="img" aria-label="Time to fill falling from 41 to 23 days over 8 weeks"></svg></div>
+      <div class="card glass"><div class="card-h"><h4>Activity feed</h4><span>all agents</span></div><div class="feed" id="anFeed"></div></div>
+    </div>
+    <div class="card glass" style="margin-top:12px"><div class="card-h"><h4>Requisition health</h4><span>flagged by Analyst agent</span></div><div class="tbl" id="reqTable"></div></div>
+  </div>
+
+  <div class="view" data-view="reports" hidden>
+    <div class="res-actions" style="margin-bottom:14px"><p class="view-sub" style="margin:0">Generated by the Analyst agent from ATS data. Sample figures.</p><span style="margin-left:auto;display:flex;gap:8px;flex-wrap:wrap"><select class="sel" id="repPeriod" aria-label="Report period"><option value="m">Last 30 days</option><option value="q">Quarter to date</option><option value="lq">Last quarter (Jul–Sep 2026)</option></select><button class="btn btn-ghost btn-sm dl" data-dl="report" data-f="pdf">⬇ PDF</button><button class="btn btn-ghost btn-sm dl" data-dl="report" data-f="csv">⬇ CSV</button><button class="btn btn-ghost btn-sm" id="repCopy">Copy summary</button><button class="btn btn-primary btn-sm" id="repRegen">Regenerate</button></span></div>
+    <div class="rep"><nav class="rep-toc glass" id="repToc" aria-label="Report sections"></nav><div class="doc" id="doc"></div></div>
+  </div>
+
+  <div class="view" data-view="atscon" hidden>
+    <div class="atc-top">
+      <span class="pill ok"><span class="live-dot"></span>Connected · <b id="atcName">Greenhouse</b></span><span class="pill">Auth · OAuth 2.0 ✓</span><span class="pill">Rate limit <b id="atcRate">982</b>/1,000 a min</span><span class="pill">Last sync <b id="atcLast">just now</b></span>
+      <div class="right"><label class="sw" for="atcHook"><input type="checkbox" id="atcHook" checked> Live webhooks</label><button class="btn btn-primary btn-sm" id="atcSync" type="button">▶ Run full sync</button><span class="dl-grp"><button class="btn btn-ghost btn-sm dl" data-dl="atslog" data-f="pdf">⬇ PDF</button><button class="btn btn-ghost btn-sm dl" data-dl="atslog" data-f="csv">⬇ CSV</button></span></div>
+    </div>
+    <div class="atc-prog"><i id="atcProg"></i></div>
+    <div class="atc-grid">
+      <div><p class="view-sub">16 things AJ can do in your ATS. Click any one to run it and watch the API call. Sample responses.</p><div class="atc-caps" id="atcCaps"></div></div>
+      <div class="atc-con"><div class="hd">api://ats/console<span><span class="live-dot"></span><span id="atcCount">0 calls</span></span></div><div class="atc-log" id="atcLog"><div class="ae" style="opacity:1;animation:none">Click a capability or Run full sync. Incoming webhooks appear here in pink.</div></div></div>
+    </div>
+  </div>
+
+  <div class="view" data-view="agents" hidden>
+    <p class="view-sub">Set how much freedom each agent has. "Suggest" sends its actions to your approval queue.</p>
+    <div class="ag-grid" id="agGrid"></div>
+  </div>
+</div>
+</main>
+</div>
+
+<button class="dock-orb" data-go="command" aria-label="Open AJ command"><span class="ring2"></span><span class="core"></span><span class="eyes"><span class="eye"></span><span class="eye"></span></span><span class="badge" id="dockBadge">3</span></button>
+<canvas id="confetti" aria-hidden="true"></canvas>
+<div id="overlay"></div>
+<div id="tourBox"></div>
+<div class="toast" id="toast" role="status"></div>
+
+<div class="gate" id="gate" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
+  <div class="gate-card glass">
+    <div class="gate-side">
+      <div class="robot" aria-hidden="true"><svg class="rb" viewBox="0 0 320 360" role="img" aria-label="AJ, the hiring robot">
+<defs>
+<linearGradient id="rbSg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".6" stop-color="#EEF5FF"/><stop offset="1" stop-color="#D6E7FD"/></linearGradient>
+<linearGradient id="rbPg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#FFDDEE"/></linearGradient>
+<linearGradient id="rbVg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0F1A4C"/><stop offset="1" stop-color="#2C1752"/></linearGradient>
+<linearGradient id="rbEg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D2F4FF"/><stop offset="1" stop-color="#3D9BFF"/></linearGradient>
+<radialGradient id="rbHg" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#8EC9FF" stop-opacity=".55"/><stop offset=".6" stop-color="#FFB3D9" stop-opacity=".22"/><stop offset="1" stop-color="#FFB3D9" stop-opacity="0"/></radialGradient>
+<filter id="rbGg" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+<filter id="rbDg" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#2F86F6" flood-opacity=".22"/></filter>
+</defs>
+<circle cx="160" cy="180" r="158" fill="url(#rbHg)" class="rb-halo"/>
+<ellipse cx="160" cy="344" rx="120" ry="13" fill="none" stroke="#8EC9FF" stroke-width="2" class="rb-base"/>
+<ellipse cx="160" cy="344" rx="86" ry="8" fill="none" stroke="#FFB3D9" stroke-width="2" class="rb-base b2"/>
+<g filter="url(#rbDg)">
+<path d="M58 342 C58 284 92 254 132 250 L188 250 C228 254 262 284 262 342 Z" fill="url(#rbSg)" stroke="#C5DAF6" stroke-width="1.5"/>
+<path d="M92 278 C104 264 118 258 132 256M228 278 C216 264 202 258 188 256" stroke="#C5DAF6" stroke-width="2" fill="none"/>
+<rect x="116" y="274" width="88" height="30" rx="11" fill="url(#rbVg)"/>
+<g class="rb-leds"><circle cx="133" cy="289" r="4"/><circle cx="146.5" cy="289" r="4"/><circle cx="160" cy="289" r="4"/><circle cx="173.5" cy="289" r="4"/><circle cx="187" cy="289" r="4"/></g>
+<text x="160" y="327" text-anchor="middle" class="rb-tag">AJ</text>
+<rect x="138" y="218" width="44" height="38" rx="11" fill="#DCE9FB"/><path d="M141 231h38M141 242h38" stroke="#C5DAF6" stroke-width="2"/>
+</g>
+<g class="rb-head" filter="url(#rbDg)">
+<path d="M160 58 V31" stroke="#C5DAF6" stroke-width="4" stroke-linecap="round"/><circle cx="160" cy="26" r="8" fill="#EC4899" filter="url(#rbGg)" class="rb-ant"/>
+<circle cx="70" cy="146" r="22" fill="url(#rbPg)" stroke="#FFB3D9" stroke-width="2"/><circle cx="70" cy="146" r="10" fill="none" stroke="#EC4899" stroke-width="3" class="rb-ear"/>
+<circle cx="250" cy="146" r="22" fill="url(#rbPg)" stroke="#FFB3D9" stroke-width="2"/><circle cx="250" cy="146" r="10" fill="none" stroke="#EC4899" stroke-width="3" class="rb-ear"/>
+<rect x="78" y="56" width="164" height="170" rx="72" fill="url(#rbSg)" stroke="#C5DAF6" stroke-width="1.5"/>
+<path d="M114 72 C134 63 186 63 206 72" stroke="#fff" stroke-width="6" stroke-linecap="round" fill="none"/>
+<rect x="94" y="106" width="132" height="70" rx="35" fill="url(#rbVg)"/>
+<path d="M110 117 C132 109 172 109 198 113" stroke="#8EC9FF" stroke-opacity=".35" stroke-width="3" fill="none" stroke-linecap="round"/>
+<g id="rbEyesG" class="rb-eyes" filter="url(#rbGg)"><rect class="rb-eye" x="121" y="125" width="22" height="31" rx="11" fill="url(#rbEg)"/><rect class="rb-eye" x="177" y="125" width="22" height="31" rx="11" fill="url(#rbEg)"/></g>
+<rect class="rb-scan" x="100" y="110" width="120" height="4" rx="2" fill="#8EC9FF"/>
+<path d="M144 197 Q160 207 176 197" stroke="#8EC9FF" stroke-width="4" stroke-linecap="round" fill="none" filter="url(#rbGg)"/>
+<ellipse cx="104" cy="194" rx="9" ry="5" fill="#FFB3D9" opacity=".75"/><ellipse cx="216" cy="194" rx="9" ry="5" fill="#FFB3D9" opacity=".75"/>
+</g>
+<g class="rb-hand"><circle cx="34" cy="270" r="16" fill="url(#rbPg)" stroke="#FFB3D9" stroke-width="2"/><circle cx="34" cy="270" r="6" fill="#FFB3D9"/></g>
+<g class="rb-hand r"><circle cx="286" cy="262" r="16" fill="url(#rbSg)" stroke="#8EC9FF" stroke-width="2"/><circle cx="286" cy="262" r="6" fill="#8EC9FF"/></g>
+</svg></div>
+      <div><div class="letters">AJ IT</div><div class="exp" style="margin-top:8px">Solution · the smart hiring agent</div></div>
+      <div class="g-info">
+        <div class="g-rings">
+          <div class="g-ring"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" class="gr-bg"/><circle cx="32" cy="32" r="26" class="gr-fg" style="--p:.45;stroke:#2F86F6"/></svg><b>45%</b><span>faster time-to-fill</span></div>
+          <div class="g-ring"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" class="gr-bg"/><circle cx="32" cy="32" r="26" class="gr-fg" style="--p:.7;stroke:#EC4899"/></svg><b>70%</b><span>less manual screening</span></div>
+          <div class="g-ring"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" class="gr-bg"/><circle cx="32" cy="32" r="26" class="gr-fg" style="--p:.96;stroke:#9D7CF2"/></svg><b>96%</b><span>suggestions approved</span></div>
+        </div>
+        <div class="g-bars"><div class="lbl">Recruiter effort per hire</div><div class="gb"><span>Manual</span><i style="--w:100%;background:#C5DAF6"></i><b>18h</b></div><div class="gb"><span>AJ</span><i style="--w:28%;background:linear-gradient(90deg,#2B7BEF,#E2468F)"></i><b>5h</b></div></div>
+        <div class="g-live"><span class="live-dot"></span><span><b id="gLive">42</b> profiles a minute in the live demo · 16 ATS ready</span></div>
+      </div>
+    </div>
+    <form class="gate-form" id="gateForm" novalidate>
+      <span class="cat"><b>Welcome</b><i></i>One step</span>
+      <h2 id="gateTitle">Step inside AJ IT Solution</h2>
+      <p class="s">Enter your work email to open the live agent. No password, no sign-up.</p>
+      <button type="button" class="btn btn-primary g-quick" id="gQuick" hidden>Continue as <span id="gQuickName"></span> →</button>
+      <div class="g-or" id="gOr" hidden>or use another email</div>
+      <div class="g-row"><input class="inp" id="gEmail" type="email" autocomplete="email" inputmode="email" placeholder="you@company.com" aria-label="Work email" required><button class="btn btn-primary" type="submit" id="gBtn">Enter →</button></div>
+      <p class="gate-err" id="gErr" hidden></p>
+      <div class="g-perks"><span>✦ Live agent demo</span><span>✦ Agent Studio</span><span>✦ Try it on your JD</span><span>✦ Free</span></div>
+      <p class="gate-note">Your email goes only to Ajay Kumar at AJ IT Solution, to follow up about the product. No spam.</p>
+      <div class="gate-foot"><span class="g-cr"><span class="cr-img" role="img" aria-label="Ajay Kumar"></span><span>Created by <b>Ajay Kumar</b></span></span><a class="btn btn-li btn-sm li-link sparkle" target="_blank" rel="noopener" href="https://www.linkedin.com/">Connect on LinkedIn</a></div>
+    </form>
+  </div>
+</div>
+
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>

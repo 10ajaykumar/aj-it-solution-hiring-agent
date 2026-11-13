@@ -1,0 +1,10 @@
+export const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+export const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+export const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+export const inr=n=>'₹'+Math.round(n).toLocaleString('en-IN');
+export const cr=n=>n>=1e7?'₹'+(n/1e7).toFixed(2)+' Cr':n>=1e5?'₹'+(n/1e5).toFixed(1)+' L':inr(n);
+export const pick=a=>a[Math.floor(Math.random()*a.length)];
+export const rnd=(a,b)=>a+Math.random()*(b-a);
+export const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+export const pad=n=>String(n).padStart(2,'0');
+export const clock=()=>new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit',timeZone:'Asia/Kolkata'});
